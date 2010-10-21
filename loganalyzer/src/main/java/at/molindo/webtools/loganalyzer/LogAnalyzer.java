@@ -35,12 +35,12 @@ import at.molindo.webtools.loganalyzer.handler.AbstractLogHandler;
 import at.molindo.webtools.loganalyzer.handler.DefaultHandler;
 
 public class LogAnalyzer {
-	
+
 	private static final String FLAG_GZIP = "--gzip";
 	private static final String FLAG_BZIP2 = "--bzip2";
 	private static final String FLAG_DIRECTORY = "--directory";
-	
-	private List<AbstractLogHandler> _logHandlers = new ArrayList<AbstractLogHandler>();
+
+	private final List<AbstractLogHandler> _logHandlers = new ArrayList<AbstractLogHandler>();
 
 	private InputStream[] _ins;
 
@@ -51,20 +51,20 @@ public class LogAnalyzer {
 	public LogAnalyzer() {
 	}
 
-	public LogAnalyzer addHandler(AbstractLogHandler handler) {
+	public LogAnalyzer addHandler(final AbstractLogHandler handler) {
 		_logHandlers.add(handler);
 		return this;
 	}
 
-	public LogAnalyzer setInputStream(InputStream in) {
+	public LogAnalyzer setInputStream(final InputStream in) {
 		return setInputStreams(in);
 	}
 
-	public LogAnalyzer setInputStreams(InputStream... ins) {
+	public LogAnalyzer setInputStreams(final InputStream... ins) {
 		_ins = ins;
 		return this;
 	}
-	
+
 	public LogAnalyzer analyze() throws IOException {
 		if (_logHandlers.size() == 0) {
 			throw new IllegalStateException("no log handlers");
@@ -74,56 +74,55 @@ public class LogAnalyzer {
 			throw new IllegalStateException("no input stream to read");
 		}
 
-		for (AbstractLogHandler h : _logHandlers) {
+		for (final AbstractLogHandler h : _logHandlers) {
 			h.onBeforeAnalyze();
 		}
-		for (InputStream in : _ins) {
-			for (AbstractLogHandler h : _logHandlers) {
+		for (final InputStream in : _ins) {
+			for (final AbstractLogHandler h : _logHandlers) {
 				h.onBeforeFile();
 			}
 			try {
-				BufferedReader r = new BufferedReader(new InputStreamReader(in));
+				final BufferedReader r = new BufferedReader(new InputStreamReader(in));
 				String line;
-				Request request = new Request(); // reuse
-		
+				final Request request = new Request(); // reuse
+
 				while ((line = r.readLine()) != null) {
 					_lineCount++;
-		
+
 					if (!request.populate(line)) {
 						_skippedCount++;
 						System.err.println("skipping illegal line: '" + line + "'");
 						continue;
 					}
-		
-					for (AbstractLogHandler h : _logHandlers) {
+
+					for (final AbstractLogHandler h : _logHandlers) {
 						h.handle(request);
 					}
 				}
-		
+
 				r.close();
 			} finally {
-				for (AbstractLogHandler h : _logHandlers) {
+				for (final AbstractLogHandler h : _logHandlers) {
 					h.onAfterFile();
 				}
 			}
 		}
-		for (AbstractLogHandler h : _logHandlers) {
+		for (final AbstractLogHandler h : _logHandlers) {
 			h.onAfterAnalyze();
 		}
 		return this;
 	}
 
 	public LogAnalyzer report() {
-		float seconds = (System.currentTimeMillis() - _start) / 1000f;
+		final float seconds = (System.currentTimeMillis() - _start) / 1000f;
 
 		System.out.println("lines:           " + _lineCount);
-		System.out.println("skipped:         " + _skippedCount + " ("
-				+ (100f / _lineCount * _skippedCount) + "%)");
+		System.out.println("skipped:         " + _skippedCount + " (" + 100f / _lineCount
+				* _skippedCount + "%)");
 		System.out.println("time to analyze: " + seconds + " s");
-		System.out.println("analysis speed:  " + _lineCount / seconds
-				+ " lines/s");
+		System.out.println("analysis speed:  " + _lineCount / seconds + " lines/s");
 
-		for (AbstractLogHandler h : _logHandlers) {
+		for (final AbstractLogHandler h : _logHandlers) {
 			System.out.println();
 			System.out.println("Handler: " + h.getName());
 			h.report();
@@ -131,11 +130,11 @@ public class LogAnalyzer {
 		return this;
 	}
 
-	public static LogAnalyzer directory(File directory) throws FileNotFoundException, IOException {
+	public static LogAnalyzer directory(final File directory) throws FileNotFoundException, IOException {
 		return directory(directory, Compression.AUTO);
 	}
-	
-	public static LogAnalyzer directory(File directory, Compression compression) throws FileNotFoundException, IOException {
+
+	public static LogAnalyzer directory(final File directory, final Compression compression) throws FileNotFoundException, IOException {
 		if (directory == null) {
 			throw new NullPointerException("directory");
 		}
@@ -145,39 +144,39 @@ public class LogAnalyzer {
 		if (compression == null) {
 			throw new NullPointerException("compression");
 		}
-		LogAnalyzer a = new LogAnalyzer();
-		File[] files = directory.listFiles();
+		final LogAnalyzer a = new LogAnalyzer();
+		final File[] files = directory.listFiles();
 		if (files == null || files.length == 0) {
 			throw new IllegalArgumentException("directory is empty: " + directory.getAbsolutePath());
 		}
-		InputStream[] ins = new InputStream[files.length];
+		final InputStream[] ins = new InputStream[files.length];
 		for (int i = 0; i < files.length; i++) {
-			ins[i] = FileUtils.newInputStream(files[i], compression);
+			ins[i] = FileUtils.in(files[i], compression);
 		}
 		a.setInputStreams(ins);
 		return a;
 	}
 
-	public static LogAnalyzer file(File file) throws FileNotFoundException, IOException {
+	public static LogAnalyzer file(final File file) throws FileNotFoundException, IOException {
 		return file(file, Compression.AUTO);
 	}
-	
-	public static LogAnalyzer file(File file, Compression compression) throws FileNotFoundException, IOException {
+
+	public static LogAnalyzer file(final File file, final Compression compression) throws FileNotFoundException, IOException {
 		if (file == null) {
 			throw new NullPointerException("file");
 		}
 		if (compression == null) {
 			throw new NullPointerException("compression");
 		}
-		LogAnalyzer a = new LogAnalyzer();
-		a.setInputStream(FileUtils.newInputStream(file, compression));
+		final LogAnalyzer a = new LogAnalyzer();
+		a.setInputStream(FileUtils.in(file, compression));
 		return a;
 	}
 
 	public static LogAnalyzer stdin() throws IOException {
 		return stdin(Compression.AUTO);
 	}
-	
+
 	public static LogAnalyzer stdin(Compression compression) throws IOException {
 		if (compression == null) {
 			throw new NullPointerException("compression");
@@ -185,8 +184,8 @@ public class LogAnalyzer {
 		if (compression == Compression.AUTO) {
 			compression = Compression.NONE;
 		}
-		LogAnalyzer a = new LogAnalyzer();
-		a.setInputStream(StreamUtils.compress(System.in, compression));
+		final LogAnalyzer a = new LogAnalyzer();
+		a.setInputStream(StreamUtils.decompress(System.in, compression));
 		return a;
 	}
 
@@ -195,28 +194,27 @@ public class LogAnalyzer {
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("file missing");
 		}
-		HashSet<String> argsSet = new HashSet<String>(Arrays.asList(args)
+		final HashSet<String> argsSet = new HashSet<String>(Arrays.asList(args)
 				.subList(0, args.length - 1));
-		
-		String fileName = args[args.length - 1];
+
+		final String fileName = args[args.length - 1];
 		File file = null;
 
-		
-		boolean readStdin = "-".equals(fileName);
+		final boolean readStdin = "-".equals(fileName);
 		Compression compression = Compression.AUTO;
-		
-		if(argsSet.remove(FLAG_GZIP)) {
+
+		if (argsSet.remove(FLAG_GZIP)) {
 			compression = Compression.GZIP;
-		} 
+		}
 		if (argsSet.remove(FLAG_BZIP2)) {
 			compression = Compression.BZIP2;
 		}
 		boolean directory = argsSet.remove(FLAG_DIRECTORY);
-		
+
 		if (!readStdin) {
 			file = new File(fileName);
 			if (!file.exists()) {
@@ -228,12 +226,11 @@ public class LogAnalyzer {
 				throw new IllegalArgumentException("can't read directory from stdin");
 			}
 		}
-		
+
 		if (argsSet.size() > 0) {
 			throw new IllegalArgumentException("unknown argument(s): " + argsSet);
 		}
 
-		
 		LogAnalyzer a;
 		if (readStdin) {
 			a = LogAnalyzer.stdin(compression);
@@ -242,28 +239,29 @@ public class LogAnalyzer {
 		} else {
 			a = LogAnalyzer.directory(file, compression);
 		}
-		
-		//a.addHandler(new DefaultHandler("All"));
-		
-		a.addHandler(
-				new DefaultHandler("Agents")
-					//.addFilter(new AgentFilter("Googlebot", false))
-					//.addFilter(new StatusFilter(302))
-					.addCollector(new AgentCollector())
-					//.addCollector(new RefererCollector())
-					//.addCollector(new RequestCollector())
-				//.addFilter(new RequestPrefixFilter("/img", "/script", "/css"))
-				//.addFilter(new RequestPrefixFilter("widgets/setlist-image"))
-					);
-		
-		//a.addHandler(new DefaultHandler("all"));
-		//a.addHandler(new DefaultHandler("resources").addFilter(new RequestPrefixFilter("/img", "/script", "/css")));
-		//a.addHandler(new DefaultHandler("widget").addFilter((new RequestPrefixFilter("/widgets/setlist-image"))));
-		
-//			a.addHandler(
-//					new DefaultHandler("Mediapartners-Google")
-//							.addFilter(new AgentFilter("Mediapartners-Google", true)));
-		
+
+		// a.addHandler(new DefaultHandler("All"));
+
+		a.addHandler(new DefaultHandler("Agents")
+		// .addFilter(new AgentFilter("Googlebot", false))
+		// .addFilter(new StatusFilter(302))
+				.addCollector(new AgentCollector())
+		// .addCollector(new RefererCollector())
+		// .addCollector(new RequestCollector())
+		// .addFilter(new RequestPrefixFilter("/img", "/script", "/css"))
+		// .addFilter(new RequestPrefixFilter("widgets/setlist-image"))
+		);
+
+		// a.addHandler(new DefaultHandler("all"));
+		// a.addHandler(new DefaultHandler("resources").addFilter(new
+		// RequestPrefixFilter("/img", "/script", "/css")));
+		// a.addHandler(new DefaultHandler("widget").addFilter((new
+		// RequestPrefixFilter("/widgets/setlist-image"))));
+
+		// a.addHandler(
+		// new DefaultHandler("Mediapartners-Google")
+		// .addFilter(new AgentFilter("Mediapartners-Google", true)));
+
 		a.analyze().report();
 	}
 }
