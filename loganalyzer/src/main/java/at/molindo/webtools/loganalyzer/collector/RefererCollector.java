@@ -27,7 +27,7 @@ import at.molindo.webtools.loganalyzer.Request;
 
 public class RefererCollector extends AbstractCollector {
 	private static final int MAX_REPORTED = 64;
-	
+
 	public RefererCollector() {
 		super("Referers");
 	}
@@ -45,8 +45,7 @@ public class RefererCollector extends AbstractCollector {
 
 		System.out.println("referers count:  " + _referers.size());
 		if (referers.size() > 0) {
-			System.out.println("referers:        " + referers
-					+ (_referers.size() > MAX_REPORTED ? " ..." : ""));
+			System.out.println("referers:        " + referers + (_referers.size() > MAX_REPORTED ? " ..." : ""));
 		}
 	}
 

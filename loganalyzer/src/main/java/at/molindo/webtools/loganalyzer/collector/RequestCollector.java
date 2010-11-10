@@ -29,7 +29,7 @@ public class RequestCollector extends AbstractCollector {
 	private static final int MAX_REPORTED = 64;
 
 	private HashSet<String> _requests = new HashSet<String>();
-	
+
 	public RequestCollector() {
 		super("Requests");
 	}
@@ -45,8 +45,7 @@ public class RequestCollector extends AbstractCollector {
 
 		System.out.println("requests count:  " + _requests.size());
 		if (r.size() > 0) {
-			System.out.println("requests:        " + r
-					+ (_requests.size() > MAX_REPORTED ? " ..." : ""));
+			System.out.println("requests:        " + r + (_requests.size() > MAX_REPORTED ? " ..." : ""));
 		}
 	}
 

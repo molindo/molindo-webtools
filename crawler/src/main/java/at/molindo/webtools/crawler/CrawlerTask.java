@@ -78,8 +78,7 @@ public class CrawlerTask implements Runnable {
 		try {
 			final long start = System.currentTimeMillis();
 
-			final HttpResponse response = ((CrawlerThread) Thread.currentThread()).getClient()
-					.execute(get);
+			final HttpResponse response = ((CrawlerThread) Thread.currentThread()).getClient().execute(get);
 
 			sr.setStatus(response.getStatusLine().getStatusCode());
 			sr.setTime((int) (System.currentTimeMillis() - start));
@@ -88,8 +87,8 @@ public class CrawlerTask implements Runnable {
 			sr.setContentType(contentTypeHeader == null || contentTypeHeader.length == 0 ? null : contentTypeHeader[0]
 					.getValue());
 
-			final String encoding = response.getEntity().getContentEncoding() == null ? null : response
-					.getEntity().getContentEncoding().getValue();
+			final String encoding = response.getEntity().getContentEncoding() == null ? null : response.getEntity()
+					.getContentEncoding().getValue();
 
 			final Object content = consumeContent(response.getEntity().getContent(), sr.getContentType(), response
 					.getEntity().getContentLength(), encoding);
@@ -102,8 +101,8 @@ public class CrawlerTask implements Runnable {
 					if (redirectLocation.startsWith("/")) {
 						redirectLocation = _crawler._host + redirectLocation.substring(1);
 					}
-					_crawler.queue(redirectLocation, new CrawlerReferrer(_urlString, response
-							.getStatusLine().getReasonPhrase() + ": " + _referrer));
+					_crawler.queue(redirectLocation, new CrawlerReferrer(_urlString, response.getStatusLine()
+							.getReasonPhrase() + ": " + _referrer));
 				} else {
 					System.err.println("redirect without location from " + _urlString);
 				}
@@ -134,14 +133,16 @@ public class CrawlerTask implements Runnable {
 
 	}
 
-	private Object consumeContent(final InputStream content, String contentType, final long contentLength, final String encoding) throws IOException {
+	private Object consumeContent(final InputStream content, String contentType, final long contentLength,
+			final String encoding) throws IOException {
 		if (contentType == null) {
 			contentType = "";
 		}
 
 		try {
 			if (contentType.startsWith("text/")) {
-				final BufferedReader r = new BufferedReader(new InputStreamReader(content, encoding == null ? "utf-8" : encoding));
+				final BufferedReader r = new BufferedReader(new InputStreamReader(content, encoding == null ? "utf-8"
+						: encoding));
 
 				String line;
 				final StringBuilder buf = new StringBuilder();
@@ -188,65 +189,59 @@ public class CrawlerTask implements Runnable {
 			inputSource = new InputSource(new StringReader(string));
 		}
 
-		((CrawlerThread) Thread.currentThread()).getParser()
-				.parse(inputSource, new DefaultHandler() {
+		((CrawlerThread) Thread.currentThread()).getParser().parse(inputSource, new DefaultHandler() {
 
-					@Override
-					public void startElement(final String uri, final String localName, final String name, final Attributes attributes) throws SAXException {
+			@Override
+			public void startElement(final String uri, final String localName, final String name,
+					final Attributes attributes) throws SAXException {
 
-						if ("a".equals(name)) {
-							String href = attributes.getValue("href");
-							if (href != null) {
-								final int anchorIndex = href.lastIndexOf("#");
-								if (anchorIndex > 0) {
-									href = href.substring(0, anchorIndex);
-								} else if (anchorIndex == 0) {
-									// anchor on same page: ignore
-									return;
-								}
+				if ("a".equals(name)) {
+					String href = attributes.getValue("href");
+					if (href != null) {
+						final int anchorIndex = href.lastIndexOf("#");
+						if (anchorIndex > 0) {
+							href = href.substring(0, anchorIndex);
+						} else if (anchorIndex == 0) {
+							// anchor on same page: ignore
+							return;
+						}
 
-								if (href != null) {
-									final CrawlerReferrer referrer = new CrawlerReferrer(_urlString, href);
-									if (!href.startsWith("http://")) {
-										if (href.startsWith("/")) {
-											_crawler.queue(_crawler._host + href.substring(1), referrer);
-										} else if (!href.startsWith("javascript:")
-												&& !href.startsWith("ftp:")
-												&& !href.startsWith("mailto:")) {
-											String relativeTo = _urlString.substring(0, _urlString
-													.lastIndexOf("/"));
-											boolean one = false, two = false;
-											while ((two = href.startsWith("../"))
-													|| (one = href.startsWith("./"))) {
-												if (two) {
-													href = href.substring(3);
-													relativeTo = relativeTo.substring(0, relativeTo
-															.lastIndexOf("/"));
-												} else if (one) {
-													href = href.substring(2);
-												}
-											}
-
-											_crawler.queue(relativeTo + "/" + href, referrer);
+						if (href != null) {
+							final CrawlerReferrer referrer = new CrawlerReferrer(_urlString, href);
+							if (!href.startsWith("http://")) {
+								if (href.startsWith("/")) {
+									_crawler.queue(_crawler._host + href.substring(1), referrer);
+								} else if (!href.startsWith("javascript:") && !href.startsWith("ftp:")
+										&& !href.startsWith("mailto:")) {
+									String relativeTo = _urlString.substring(0, _urlString.lastIndexOf("/"));
+									boolean one = false, two = false;
+									while ((two = href.startsWith("../")) || (one = href.startsWith("./"))) {
+										if (two) {
+											href = href.substring(3);
+											relativeTo = relativeTo.substring(0, relativeTo.lastIndexOf("/"));
+										} else if (one) {
+											href = href.substring(2);
 										}
-									} else if (href.startsWith(_crawler._host)) {
-										_crawler.queue(href, referrer);
 									}
+
+									_crawler.queue(relativeTo + "/" + href, referrer);
 								}
+							} else if (href.startsWith(_crawler._host)) {
+								_crawler.queue(href, referrer);
 							}
 						}
 					}
+				}
+			}
 
-					@Override
-					public InputSource resolveEntity(final String publicId, String systemId) throws IOException, SAXException {
-						if ("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-								.equals(systemId)) {
-							systemId = getClass().getClassLoader()
-									.getResource("xhtml1-transitional.dtd").toString();
-						}
+			@Override
+			public InputSource resolveEntity(final String publicId, String systemId) throws IOException, SAXException {
+				if ("http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd".equals(systemId)) {
+					systemId = getClass().getClassLoader().getResource("xhtml1-transitional.dtd").toString();
+				}
 
-						return _crawler.getDtdMemoryCache().resolveEntity(publicId, systemId);
-					}
-				});
+				return _crawler.getDtdMemoryCache().resolveEntity(publicId, systemId);
+			}
+		});
 	}
 }

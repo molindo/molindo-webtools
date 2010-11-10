@@ -57,8 +57,7 @@ public class Crawler extends Observable {
 
 	public Crawler(final String host, final String start, final int threads, final int max, final boolean tidy) {
 		_host = host.endsWith("/") ? host : host + "/";
-		_start = start.startsWith(_host) ? start : _host
-				+ (start.startsWith("/") ? start.substring(1) : start);
+		_start = start.startsWith(_host) ? start : _host + (start.startsWith("/") ? start.substring(1) : start);
 		_tidy = tidy;
 
 		final XMLParserConfiguration config = new XIncludeAwareParserConfiguration();
@@ -67,14 +66,15 @@ public class Crawler extends Observable {
 		_parserFactory = SAXParserFactory.newInstance();
 		_dtdMemoryCache = new DTDMemoryCache();
 
-		_executor = new ThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, newBlockingQueue(), new ThreadFactory() {
+		_executor = new ThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, newBlockingQueue(),
+				new ThreadFactory() {
 
-			@Override
-			public Thread newThread(final Runnable r) {
-				return new CrawlerThread(Crawler.this, r);
-			}
+					@Override
+					public Thread newThread(final Runnable r) {
+						return new CrawlerThread(Crawler.this, r);
+					}
 
-		});
+				});
 		_executor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
 
 			@Override

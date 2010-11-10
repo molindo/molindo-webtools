@@ -21,14 +21,12 @@ package at.molindo.webtools.loganalyzer.filter;
 
 import at.molindo.webtools.loganalyzer.Request;
 
-
 public class AgentFilter extends AbstractFilter {
 	private String _criteria;
 	private boolean _ignoreCase;
 
 	public AgentFilter(String criteria, boolean ignoreCase) {
-		super("Agents containing '" + criteria + "'"
-				+ (ignoreCase ? " (case ignored)" : ""));
+		super("Agents containing '" + criteria + "'" + (ignoreCase ? " (case ignored)" : ""));
 
 		if (criteria == null || "".equals(criteria)) {
 			throw new IllegalArgumentException("criteria must not be empty");

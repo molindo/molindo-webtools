@@ -21,7 +21,6 @@ package at.molindo.webtools.loganalyzer.collector;
 
 import at.molindo.webtools.loganalyzer.Request;
 
-
 public abstract class AbstractCollector {
 	private String _name;
 

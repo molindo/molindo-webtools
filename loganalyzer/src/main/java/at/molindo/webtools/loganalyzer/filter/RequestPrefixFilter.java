@@ -24,15 +24,15 @@ public class RequestPrefixFilter extends AbstractFilter {
 
 	private String[] _prefixes;
 
-	public RequestPrefixFilter(String ... prefixes) {
-		super("Requests starting with '"+Arrays.toString(prefixes)+"'");
+	public RequestPrefixFilter(String... prefixes) {
+		super("Requests starting with '" + Arrays.toString(prefixes) + "'");
 		if (prefixes == null) {
 			throw new NullPointerException("prefix");
 		}
 		if (prefixes.length == 0) {
 			throw new IllegalArgumentException("at least one prefix required");
 		}
-		_prefixes= prefixes;
+		_prefixes = prefixes;
 	}
 
 	@Override

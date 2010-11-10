@@ -117,8 +117,7 @@ public class LogAnalyzer {
 		final float seconds = (System.currentTimeMillis() - _start) / 1000f;
 
 		System.out.println("lines:           " + _lineCount);
-		System.out.println("skipped:         " + _skippedCount + " (" + 100f / _lineCount
-				* _skippedCount + "%)");
+		System.out.println("skipped:         " + _skippedCount + " (" + 100f / _lineCount * _skippedCount + "%)");
 		System.out.println("time to analyze: " + seconds + " s");
 		System.out.println("analysis speed:  " + _lineCount / seconds + " lines/s");
 
@@ -134,7 +133,8 @@ public class LogAnalyzer {
 		return directory(directory, Compression.AUTO);
 	}
 
-	public static LogAnalyzer directory(final File directory, final Compression compression) throws FileNotFoundException, IOException {
+	public static LogAnalyzer directory(final File directory, final Compression compression)
+			throws FileNotFoundException, IOException {
 		if (directory == null) {
 			throw new NullPointerException("directory");
 		}
@@ -161,7 +161,8 @@ public class LogAnalyzer {
 		return file(file, Compression.AUTO);
 	}
 
-	public static LogAnalyzer file(final File file, final Compression compression) throws FileNotFoundException, IOException {
+	public static LogAnalyzer file(final File file, final Compression compression) throws FileNotFoundException,
+			IOException {
 		if (file == null) {
 			throw new NullPointerException("file");
 		}
@@ -198,8 +199,7 @@ public class LogAnalyzer {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("file missing");
 		}
-		final HashSet<String> argsSet = new HashSet<String>(Arrays.asList(args)
-				.subList(0, args.length - 1));
+		final HashSet<String> argsSet = new HashSet<String>(Arrays.asList(args).subList(0, args.length - 1));
 
 		final String fileName = args[args.length - 1];
 		File file = null;

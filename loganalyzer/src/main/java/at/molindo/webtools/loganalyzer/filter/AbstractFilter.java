@@ -21,7 +21,6 @@ package at.molindo.webtools.loganalyzer.filter;
 
 import at.molindo.webtools.loganalyzer.Request;
 
-
 public abstract class AbstractFilter {
 	private String _name;
 

@@ -56,10 +56,9 @@ public class LogReplay {
 				+ (host.getPort() >= 0 ? ":" + host.getPort() : "");
 
 		final int threads = Integer.parseInt(System.getProperty("logreplay.threads", "4"));
-		final boolean tidy = Boolean.parseBoolean(System
-				.getProperty("logreplay.tidy", Boolean.FALSE.toString()));
-		final Compression compression = Compression.valueOf(System
-				.getProperty("logreplay.compression", Compression.AUTO.name()));
+		final boolean tidy = Boolean.parseBoolean(System.getProperty("logreplay.tidy", Boolean.FALSE.toString()));
+		final Compression compression = Compression.valueOf(System.getProperty("logreplay.compression",
+				Compression.AUTO.name()));
 
 		LogAnalyzer a;
 		if (file == null) {
@@ -179,8 +178,8 @@ public class LogReplay {
 			}
 
 			private String unquote(final String str) {
-				return str.length() > 1 && str.endsWith("\"") && str.startsWith("\"") ? str
-						.substring(1, str.length() - 1) : str;
+				return str.length() > 1 && str.endsWith("\"") && str.startsWith("\"") ? str.substring(1,
+						str.length() - 1) : str;
 			}
 		});
 		a.analyze();

@@ -92,13 +92,10 @@ public class DefaultHandler extends AbstractLogHandler {
 		}
 
 		System.out.println("requests:        " + _requests);
-		System.out.println("no length:       " + _noLength + " ("
-				+ (100f / _requests * _noLength) + "%)");
-		System.out.println("total length:    "
-				+ (_totalLength / (1024 * 1024)) + " MB");
+		System.out.println("no length:       " + _noLength + " (" + (100f / _requests * _noLength) + "%)");
+		System.out.println("total length:    " + (_totalLength / (1024 * 1024)) + " MB");
 		for (Map.Entry<Integer, DefaultHandler.PerStatusInfo> e : _statusCounts.entrySet()) {
-			System.out
-					.println(e.getKey() + ":             " + e.getValue());
+			System.out.println(e.getKey() + ":             " + e.getValue());
 		}
 
 		if (_collectors.size() > 0) {
@@ -117,8 +114,7 @@ public class DefaultHandler extends AbstractLogHandler {
 
 		@Override
 		public String toString() {
-			return "count=" + _count + ", length=" + _length
-					+ ", noLength=" + _noLength;
+			return "count=" + _count + ", length=" + _length + ", noLength=" + _noLength;
 		}
 
 		public void increment(int length) {

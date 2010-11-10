@@ -52,8 +52,7 @@ public final class SlowRequestObserver implements Observer {
 
 			if (sr.getStatus() == 200 || sr.getErrorMessage() != null) {
 				if (sr.getTime() > _threshold) {
-					System.out.println(sr.getTime() + "ms #" + s.getRetrievedCount() + " "
-							+ sr.getUrl());
+					System.out.println(sr.getTime() + "ms #" + s.getRetrievedCount() + " " + sr.getUrl());
 				}
 			} else if (sr.getStatus() / 100 == 3) {
 				// redirect

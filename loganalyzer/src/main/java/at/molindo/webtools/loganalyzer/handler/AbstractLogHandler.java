@@ -21,7 +21,6 @@ package at.molindo.webtools.loganalyzer.handler;
 
 import at.molindo.webtools.loganalyzer.Request;
 
-
 public abstract class AbstractLogHandler {
 	private String _name;
 
@@ -50,7 +49,7 @@ public abstract class AbstractLogHandler {
 
 	public void onAfterAnalyze() {
 	}
-	
+
 	public void onBeforeAnalyze() {
 	}
 }

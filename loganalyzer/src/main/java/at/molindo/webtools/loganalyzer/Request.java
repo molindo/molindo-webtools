@@ -33,7 +33,7 @@ public final class Request {
 	private static final int FIELD_LENGTH = 6;
 	private static final int FIELD_REFERER = 7;
 	private static final int FIELD_AGENT = 8;
-	
+
 	int _field;
 	private String _previous;
 
@@ -45,7 +45,7 @@ public final class Request {
 	private String _method;
 	private String _path;
 	private String _protocol;
-	
+
 	public Request() {
 	}
 
@@ -53,12 +53,11 @@ public final class Request {
 		try {
 			return Integer.parseInt(string);
 		} catch (NumberFormatException e) {
-			System.err.println(e.getClass().getSimpleName() + ": "
-					+ e.getMessage());
+			System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
 			return -1;
 		}
 	}
-	
+
 	public boolean populate(String line) {
 		_line = line;
 		_previous = null;
@@ -76,7 +75,7 @@ public final class Request {
 			case NONE:
 				switch (c) {
 				case ' ':
-					//set("");
+					// set("");
 					last = i;
 					break;
 				case '"':
@@ -99,14 +98,12 @@ public final class Request {
 				}
 				break;
 			case BRACKETS:
-				if (c == ']'
-						&& (chars.length == i + 1 || chars[i + 1] == ' ')) {
+				if (c == ']' && (chars.length == i + 1 || chars[i + 1] == ' ')) {
 					state = FieldState.NORMAL;
 				}
 				break;
 			case QUOTES:
-				if (c == '"'
-						&& (chars.length == i + 1 || chars[i + 1] == ' ')) {
+				if (c == '"' && (chars.length == i + 1 || chars[i + 1] == ' ')) {
 					state = FieldState.NORMAL;
 				}
 				break;
@@ -131,7 +128,7 @@ public final class Request {
 		}
 
 		if (_field < _values.length) {
-		switch (_field) {
+			switch (_field) {
 			case FIELD_DATE:
 				_date = new LazyDate(string);
 				break;
@@ -147,7 +144,8 @@ public final class Request {
 				if (first > 0 && last > first) {
 					_method = string.substring(string.startsWith("\"") ? 1 : 0, first);
 					_path = string.substring(first + 1, last);
-					_protocol = string.substring(last + 1, string.endsWith("\"") ? string.length() - 1 : string.length());
+					_protocol = string.substring(last + 1,
+							string.endsWith("\"") ? string.length() - 1 : string.length());
 				} else {
 					System.err.println("unexpected request line: " + string);
 				}
@@ -191,7 +189,7 @@ public final class Request {
 	public String getReferer() {
 		return _values[FIELD_REFERER];
 	}
-	
+
 	public String getMethod() {
 		return _method;
 	}
@@ -210,8 +208,7 @@ public final class Request {
 
 	private static class LazyDate {
 		// e.g. [24/Feb/2009:13:17:50 +0000]
-		private static DateFormat FORMAT = new SimpleDateFormat(
-				"[d/MMM/yyyy:HH:mm:ss Z]");
+		private static DateFormat FORMAT = new SimpleDateFormat("[d/MMM/yyyy:HH:mm:ss Z]");
 		private static Date ERROR = new Date(0);
 
 		private String _dateStr;
@@ -236,5 +233,5 @@ public final class Request {
 			}
 		}
 	}
-	
+
 }

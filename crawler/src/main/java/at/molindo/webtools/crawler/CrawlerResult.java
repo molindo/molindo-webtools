@@ -35,8 +35,7 @@ public final class CrawlerResult implements Serializable {
 	private String _errorMessage;
 	private String _contentType;
 	private String _text;
-	private SortedSet<CrawlerReferrer> _referrers = Collections
-			.synchronizedSortedSet(new TreeSet<CrawlerReferrer>());
+	private SortedSet<CrawlerReferrer> _referrers = Collections.synchronizedSortedSet(new TreeSet<CrawlerReferrer>());
 
 	public String getUrl() {
 		return _url;

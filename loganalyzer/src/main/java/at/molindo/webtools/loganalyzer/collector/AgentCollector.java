@@ -27,7 +27,7 @@ import at.molindo.webtools.loganalyzer.Request;
 
 public class AgentCollector extends AbstractCollector {
 	private static final int MAX_REPORTED = 64;
-	
+
 	public AgentCollector() {
 		super("Agents");
 	}
@@ -45,8 +45,7 @@ public class AgentCollector extends AbstractCollector {
 
 		System.out.println("agents count:    " + _agents.size());
 		if (agents.size() > 0) {
-			System.out.println("agents:          " + agents
-					+ (_agents.size() > MAX_REPORTED ? " ..." : ""));
+			System.out.println("agents:          " + agents + (_agents.size() > MAX_REPORTED ? " ..." : ""));
 		}
 	}
 

@@ -32,8 +32,7 @@ public class StatusFilter extends AbstractFilter {
 		super("Requests with statuses: " + Arrays.asList(statuses));
 
 		if (statuses.length == 0) {
-			throw new IllegalArgumentException(
-					"at least one status is required");
+			throw new IllegalArgumentException("at least one status is required");
 		}
 		for (int status : statuses) {
 			_statuses.add(status);
