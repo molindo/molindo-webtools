@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer.collector;
 
 import java.util.ArrayList;
@@ -32,7 +28,7 @@ public class AgentCollector extends AbstractCollector {
 		super("Agents");
 	}
 
-	private HashSet<String> _agents = new HashSet<String>();
+	private final HashSet<String> _agents = new HashSet<String>();
 
 	@Override
 	public void report() {

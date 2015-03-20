@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer.filter;
 
 import at.molindo.webtools.loganalyzer.Request;
 
 public class AgentFilter extends AbstractFilter {
-	private String _criteria;
-	private boolean _ignoreCase;
+	private final String _criteria;
+	private final boolean _ignoreCase;
 
 	public AgentFilter(String criteria, boolean ignoreCase) {
 		super("Agents containing '" + criteria + "'" + (ignoreCase ? " (case ignored)" : ""));
@@ -32,14 +28,15 @@ public class AgentFilter extends AbstractFilter {
 			throw new IllegalArgumentException("criteria must not be empty");
 		}
 		_ignoreCase = ignoreCase;
-		_criteria = (_ignoreCase) ? criteria.toLowerCase() : criteria;
+		_criteria = _ignoreCase ? criteria.toLowerCase() : criteria;
 	}
 
 	@Override
 	public boolean filter(Request request) {
 		String agent = request.getAgent();
-		if (_ignoreCase)
+		if (_ignoreCase) {
 			agent = agent.toLowerCase();
+		}
 		return !agent.contains(_criteria);
 	}
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package at.molindo.webtools.loganalyzer.filter;
 
 import java.util.Arrays;
@@ -22,7 +21,7 @@ import at.molindo.webtools.loganalyzer.Request;
 
 public class RequestPrefixFilter extends AbstractFilter {
 
-	private String[] _prefixes;
+	private final String[] _prefixes;
 
 	public RequestPrefixFilter(String... prefixes) {
 		super("Requests starting with '" + Arrays.toString(prefixes) + "'");

@@ -52,8 +52,21 @@ public class LogReplay {
 
 		final File file = "-".equals(args[0]) ? null : new File(args[0]);
 		final URL host = new URL(args[1]);
+
 		final String baseUrl = host.getProtocol() + "://" + host.getHost()
 				+ (host.getPort() >= 0 ? ":" + host.getPort() : "");
+
+		// support auth via http://username:password@host.com
+		String username = null;
+		String password = null;
+		if (host.getUserInfo() != null) {
+			final String credentials = host.getUserInfo();
+			int colon = credentials.indexOf(":");
+			if (colon > -1 && colon + 1 < credentials.length()) {
+				username = credentials.substring(0, colon);
+				password = credentials.substring(colon + 1, credentials.length());
+			}
+		}
 
 		final int threads = Integer.parseInt(System.getProperty("logreplay.threads", "4"));
 		final boolean tidy = Boolean.parseBoolean(System.getProperty("logreplay.tidy", Boolean.FALSE.toString()));
@@ -69,7 +82,8 @@ public class LogReplay {
 			a = LogAnalyzer.file(file, compression);
 		}
 
-		final Crawler crawler = new Crawler(host.toString(), host.toString(), threads, Integer.MAX_VALUE, tidy) {
+		final Crawler crawler = new Crawler(host.toString(), username, password, host.toString(), threads,
+				Integer.MAX_VALUE, tidy) {
 
 			@Override
 			protected CrawlerTask newCrawlerTask(final String url, final CrawlerReferrer referrer, final boolean tidy) {

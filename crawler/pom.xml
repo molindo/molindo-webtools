@@ -21,6 +21,7 @@
 		<dependency>
 			<groupId>at.molindo</groupId>
 			<artifactId>molindo-utils</artifactId>
+			<version>${molindo-utils.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer;
 
 import java.text.DateFormat;
@@ -41,7 +37,7 @@ public final class Request {
 	private LazyDate _date;
 	private int _status;
 	private int _length;
-	private String[] _values = new String[11];
+	private final String[] _values = new String[11];
 	private String _method;
 	private String _path;
 	private String _protocol;
@@ -115,7 +111,7 @@ public final class Request {
 			set(line.substring(last + 1));
 		}
 
-		return (_field == 9) && _status > 0 && _length >= 0;
+		return _field == 9 && _status > 0 && _length >= 0;
 	}
 
 	private void set(String string) {
@@ -211,7 +207,7 @@ public final class Request {
 		private static DateFormat FORMAT = new SimpleDateFormat("[d/MMM/yyyy:HH:mm:ss Z]");
 		private static Date ERROR = new Date(0);
 
-		private String _dateStr;
+		private final String _dateStr;
 		private Date _date;
 
 		public LazyDate(String date) {
