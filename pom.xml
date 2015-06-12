@@ -20,9 +20,9 @@
 	<url>http://github.com/molindo/molindo-webtools</url>
 
 	<scm>
-	    <connection>scm:git:git@github.com:molindo/molindo-webtools.git</connection>
-    	<developerConnection>scm:git:git@github.com:molindo/molindo-webtools.git</developerConnection>
-    	<url>git@github.com:molindo/molindo-webtools.git</url>
+		<connection>scm:git:git@github.com:molindo/molindo-webtools.git</connection>
+		<developerConnection>scm:git:git@github.com:molindo/molindo-webtools.git</developerConnection>
+		<url>git@github.com:molindo/molindo-webtools.git</url>
 	</scm>
 
 	<licenses>
@@ -72,7 +72,7 @@
 			<artifactId>jtidy</artifactId>
 			<version>4aug2000r7-dev</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>at.molindo</groupId>
 			<artifactId>molindo-utils</artifactId>
@@ -131,7 +131,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<properties>
 		<molindo-utils.version>2.0.4</molindo-utils.version>
 	</properties>
