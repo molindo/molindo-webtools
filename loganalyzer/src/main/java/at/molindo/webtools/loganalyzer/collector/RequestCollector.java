@@ -47,6 +47,6 @@ public class RequestCollector extends AbstractCollector {
 
 	@Override
 	public void collect(Request request) {
-		_requests.add(request.getRequest());
+		_requests.add(request.getRequestUri());
 	}
 }

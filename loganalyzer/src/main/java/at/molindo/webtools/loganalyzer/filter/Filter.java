@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package at.molindo.webtools.loganalyzer.collector;
+package at.molindo.webtools.loganalyzer.filter;
 
-public abstract class AbstractCollector implements Collector {
+import at.molindo.webtools.loganalyzer.Request;
 
-	private final String _name;
+public interface Filter {
 
-	public AbstractCollector(String name) {
-		_name = name;
-	}
+	String getName();
 
-	@Override
-	public String getName() {
-		return _name;
-	}
+	/**
+	 * @return true if request should be skipped
+	 */
+	boolean filter(Request request);
 
 }

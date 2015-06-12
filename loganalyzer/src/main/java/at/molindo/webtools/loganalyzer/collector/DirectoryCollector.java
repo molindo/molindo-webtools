@@ -15,17 +15,17 @@
  */
 package at.molindo.webtools.loganalyzer.collector;
 
-public abstract class AbstractCollector implements Collector {
+import at.molindo.webtools.loganalyzer.Request;
 
-	private final String _name;
+public class DirectoryCollector extends KeyCountCollector<String> {
 
-	public AbstractCollector(String name) {
-		_name = name;
+	public DirectoryCollector() {
+		super("Directory");
 	}
 
 	@Override
-	public String getName() {
-		return _name;
+	protected String getKey(Request request) {
+		return request.getPathDirectory();
 	}
 
 }

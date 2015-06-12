@@ -66,7 +66,9 @@ public class CrawlerTask implements Runnable {
 
 		final CrawlerResult sr = new CrawlerResult();
 		sr.setUrl(_urlString);
-		sr.getReferrers().add(_referrer);
+		if (_referrer != null) {
+			sr.getReferrers().add(_referrer);
+		}
 
 		final HttpGet get = new HttpGet(_urlString);
 		// get.setFollowRedirects(false);

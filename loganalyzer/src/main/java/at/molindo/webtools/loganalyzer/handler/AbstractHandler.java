@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package at.molindo.webtools.loganalyzer.collector;
+package at.molindo.webtools.loganalyzer.handler;
 
-public abstract class AbstractCollector implements Collector {
-
+public abstract class AbstractHandler implements Handler {
 	private final String _name;
 
-	public AbstractCollector(String name) {
+	public AbstractHandler(String name) {
 		_name = name;
 	}
 
@@ -28,4 +27,19 @@ public abstract class AbstractCollector implements Collector {
 		return _name;
 	}
 
+	@Override
+	public void onAfterFile() {
+	}
+
+	@Override
+	public void onBeforeFile() {
+	}
+
+	@Override
+	public void onAfterAnalyze() {
+	}
+
+	@Override
+	public void onBeforeAnalyze() {
+	}
 }

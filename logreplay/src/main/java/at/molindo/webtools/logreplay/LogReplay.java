@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +41,7 @@ import at.molindo.webtools.crawler.filter.SuffixFilter;
 import at.molindo.webtools.crawler.observer.SlowRequestObserver;
 import at.molindo.webtools.loganalyzer.LogAnalyzer;
 import at.molindo.webtools.loganalyzer.Request;
-import at.molindo.webtools.loganalyzer.handler.AbstractLogHandler;
+import at.molindo.webtools.loganalyzer.handler.AbstractHandler;
 
 public class LogReplay {
 
@@ -146,7 +147,7 @@ public class LogReplay {
 
 		crawler.addObserver(new SlowRequestObserver(400));
 
-		a.addHandler(new AbstractLogHandler("replay") {
+		a.addHandler(new AbstractHandler("replay") {
 
 			private final Pattern _request = Pattern.compile("^([A-Z]+) (.*) (HTTP/[01]\\.[019])$");
 
@@ -160,7 +161,7 @@ public class LogReplay {
 					return;
 				}
 
-				String r = extractRequest(unquote(request.getRequest()));
+				String r = extractRequest(unquote(request.getRequestLine()));
 				if (r == null) {
 					return;
 				}
@@ -196,6 +197,15 @@ public class LogReplay {
 						str.length() - 1) : str;
 			}
 		});
-		a.analyze();
+
+		try {
+			a.analyze();
+			crawler.shutdown();
+			crawler.awaitTermination(1, TimeUnit.HOURS);
+		} catch (InterruptedException e) {
+			System.err.println("waiting for completion interrupted");
+		} finally {
+			System.exit(0);
+		}
 	}
 }

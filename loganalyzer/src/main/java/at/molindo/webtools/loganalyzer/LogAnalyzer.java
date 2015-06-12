@@ -23,35 +23,50 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
+import at.molindo.utils.data.ComparatorUtils;
 import at.molindo.utils.io.Compression;
 import at.molindo.utils.io.FileUtils;
 import at.molindo.utils.io.StreamUtils;
 import at.molindo.webtools.loganalyzer.collector.AgentCollector;
-import at.molindo.webtools.loganalyzer.handler.AbstractLogHandler;
 import at.molindo.webtools.loganalyzer.handler.DefaultHandler;
+import at.molindo.webtools.loganalyzer.handler.Handler;
 
+/**
+ * main class that
+ * 
+ * 
+ * @author stf
+ */
 public class LogAnalyzer {
 
 	private static final String FLAG_GZIP = "--gzip";
 	private static final String FLAG_BZIP2 = "--bzip2";
 	private static final String FLAG_DIRECTORY = "--directory";
 
-	private final List<AbstractLogHandler> _logHandlers = new ArrayList<AbstractLogHandler>();
+	private final List<Handler> _handlers = new ArrayList<Handler>();
 
 	private InputStream[] _ins;
 
-	long _start = System.currentTimeMillis();
-	int _lineCount = 0;
-	int _skippedCount = 0;
+	private final long _start = System.currentTimeMillis();
+	private int _lineCount = 0;
+	private int _skippedCount = 0;
+	private int _progress = 0;
 
 	public LogAnalyzer() {
 	}
 
-	public LogAnalyzer addHandler(final AbstractLogHandler handler) {
-		_logHandlers.add(handler);
+	public LogAnalyzer setProgressStep(int progress) {
+		_progress = progress;
+		return this;
+	}
+
+	public LogAnalyzer addHandler(final Handler handler) {
+		_handlers.add(handler);
 		return this;
 	}
 
@@ -65,7 +80,7 @@ public class LogAnalyzer {
 	}
 
 	public LogAnalyzer analyze() throws IOException {
-		if (_logHandlers.size() == 0) {
+		if (_handlers.size() == 0) {
 			throw new IllegalStateException("no log handlers");
 		}
 
@@ -73,11 +88,11 @@ public class LogAnalyzer {
 			throw new IllegalStateException("no input stream to read");
 		}
 
-		for (final AbstractLogHandler h : _logHandlers) {
+		for (final Handler h : _handlers) {
 			h.onBeforeAnalyze();
 		}
 		for (final InputStream in : _ins) {
-			for (final AbstractLogHandler h : _logHandlers) {
+			for (final Handler h : _handlers) {
 				h.onBeforeFile();
 			}
 			try {
@@ -88,25 +103,30 @@ public class LogAnalyzer {
 				while ((line = r.readLine()) != null) {
 					_lineCount++;
 
+					if (_progress > 0 && _lineCount % _progress == 0) {
+						System.out.println("processed " + _lineCount + " lines in "
+								+ (System.currentTimeMillis() - _start) + "ms");
+					}
+
 					if (!request.populate(line)) {
 						_skippedCount++;
 						System.err.println("skipping illegal line: '" + line + "'");
 						continue;
 					}
 
-					for (final AbstractLogHandler h : _logHandlers) {
+					for (final Handler h : _handlers) {
 						h.handle(request);
 					}
 				}
 
 				r.close();
 			} finally {
-				for (final AbstractLogHandler h : _logHandlers) {
+				for (final Handler h : _handlers) {
 					h.onAfterFile();
 				}
 			}
 		}
-		for (final AbstractLogHandler h : _logHandlers) {
+		for (final Handler h : _handlers) {
 			h.onAfterAnalyze();
 		}
 		return this;
@@ -120,7 +140,7 @@ public class LogAnalyzer {
 		System.out.println("time to analyze: " + seconds + " s");
 		System.out.println("analysis speed:  " + _lineCount / seconds + " lines/s");
 
-		for (final AbstractLogHandler h : _logHandlers) {
+		for (final Handler h : _handlers) {
 			System.out.println();
 			System.out.println("Handler: " + h.getName());
 			h.report();
@@ -143,17 +163,37 @@ public class LogAnalyzer {
 		if (compression == null) {
 			throw new NullPointerException("compression");
 		}
-		final LogAnalyzer a = new LogAnalyzer();
 		final File[] files = directory.listFiles();
 		if (files == null || files.length == 0) {
 			throw new IllegalArgumentException("directory is empty: " + directory.getAbsolutePath());
 		}
-		final InputStream[] ins = new InputStream[files.length];
-		for (int i = 0; i < files.length; i++) {
-			ins[i] = FileUtils.in(files[i], compression);
+		return files(files, compression);
+	}
+
+	public static LogAnalyzer files(final File[] files, final Compression compression) throws FileNotFoundException,
+			IOException {
+
+		if (files == null || files.length == 0) {
+			throw new IllegalArgumentException("no files");
 		}
-		a.setInputStreams(ins);
-		return a;
+
+		// sort files alphabetically TODO allow other sort options
+		List<File> list = new ArrayList<File>(Arrays.asList(files));
+		Collections.sort(list, new Comparator<File>() {
+
+			@Override
+			public int compare(File o1, File o2) {
+				return ComparatorUtils.nullLowCompareTo(o1.getName(), o2.getName());
+			}
+		});
+
+		final InputStream[] ins = new InputStream[files.length];
+		int i = 0;
+		for (File file : files) {
+			ins[i++] = FileUtils.in(file, compression);
+		}
+
+		return new LogAnalyzer().setInputStreams(ins);
 	}
 
 	public static LogAnalyzer file(final File file) throws FileNotFoundException, IOException {
@@ -189,12 +229,7 @@ public class LogAnalyzer {
 		return a;
 	}
 
-	/**
-	 *
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(final String[] args) throws Exception {
+	public static LogAnalyzer args(String[] args) throws IOException {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("file missing");
 		}
@@ -238,6 +273,18 @@ public class LogAnalyzer {
 		} else {
 			a = LogAnalyzer.directory(file, compression);
 		}
+
+		return a;
+
+	}
+
+	/**
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(final String[] args) throws Exception {
+		LogAnalyzer a = args(args);
 
 		// a.addHandler(new DefaultHandler("All"));
 

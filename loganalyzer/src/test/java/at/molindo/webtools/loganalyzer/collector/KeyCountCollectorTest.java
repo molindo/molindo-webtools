@@ -15,17 +15,14 @@
  */
 package at.molindo.webtools.loganalyzer.collector;
 
-public abstract class AbstractCollector implements Collector {
+import static org.junit.Assert.assertEquals;
 
-	private final String _name;
+import org.junit.Test;
 
-	public AbstractCollector(String name) {
-		_name = name;
+public class KeyCountCollectorTest {
+
+	@Test
+	public void format() {
+		assertEquals("foo: 1 (33.3333%)", KeyCountCollector.format("foo", 1, 3));
 	}
-
-	@Override
-	public String getName() {
-		return _name;
-	}
-
 }

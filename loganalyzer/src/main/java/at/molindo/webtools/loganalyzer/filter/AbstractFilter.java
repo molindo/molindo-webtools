@@ -15,26 +15,16 @@
  */
 package at.molindo.webtools.loganalyzer.filter;
 
-import at.molindo.webtools.loganalyzer.Request;
-
-public abstract class AbstractFilter {
-	private String _name;
+public abstract class AbstractFilter implements Filter {
+	private final String _name;
 
 	public AbstractFilter(String name) {
-		setName(name);
+		_name = name;
 	}
 
-	/**
-	 * @return true if request should be skipped
-	 */
-	public abstract boolean filter(Request request);
-
+	@Override
 	public String getName() {
 		return _name;
 	}
 
-	public AbstractFilter setName(String name) {
-		_name = name;
-		return this;
-	}
 }

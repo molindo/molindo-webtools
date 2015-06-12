@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>at.molindo</groupId>
 		<artifactId>molindo-oss-pom</artifactId>
-		<version>4</version>
+		<version>5</version>
 	</parent>
 
 	<artifactId>molindo-webtools</artifactId>
@@ -20,9 +20,9 @@
 	<url>http://github.com/molindo/molindo-webtools</url>
 
 	<scm>
-	    <connection>scm:git:git@github.com:molindo/molindo-webtools.git</connection>
-    	<developerConnection>scm:git:git@github.com:molindo/molindo-webtools.git</developerConnection>
-    	<url>git@github.com:molindo/molindo-webtools.git</url>
+		<connection>scm:git:git@github.com:molindo/molindo-webtools.git</connection>
+		<developerConnection>scm:git:git@github.com:molindo/molindo-webtools.git</developerConnection>
+		<url>git@github.com:molindo/molindo-webtools.git</url>
 	</scm>
 
 	<licenses>
@@ -38,28 +38,26 @@
 		<module>loganalyzer</module>
 		<module>logreplay</module>
 	</modules>
-	
+
 	<dependencyManagement>
 		<dependencies>
-		
+
 			<!-- modules -->
 			<dependency>
 				<groupId>at.molindo</groupId>
-				<artifactId>molindo-crawler</artifactId>
+				<artifactId>molindo-webtools-crawler</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>at.molindo</groupId>
-				<artifactId>molindo-loganalyzer</artifactId>
+				<artifactId>molindo-webtools-loganalyzer</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>at.molindo</groupId>
-				<artifactId>molindo-logreplay</artifactId>
+				<artifactId>molindo-webtools-logreplay</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-		
-		
 		</dependencies>
 	</dependencyManagement>
 
@@ -74,7 +72,7 @@
 			<artifactId>jtidy</artifactId>
 			<version>4aug2000r7-dev</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>at.molindo</groupId>
 			<artifactId>molindo-utils</artifactId>
@@ -133,9 +131,9 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<properties>
-		<molindo-utils.version>1.1.4</molindo-utils.version>
+		<molindo-utils.version>2.0.4</molindo-utils.version>
 	</properties>
 
 </project>

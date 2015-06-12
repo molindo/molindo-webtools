@@ -16,40 +16,40 @@
 package at.molindo.webtools.loganalyzer.handler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import at.molindo.webtools.loganalyzer.Request;
-import at.molindo.webtools.loganalyzer.collector.AbstractCollector;
-import at.molindo.webtools.loganalyzer.filter.AbstractFilter;
+import at.molindo.webtools.loganalyzer.collector.Collector;
+import at.molindo.webtools.loganalyzer.filter.Filter;
 
-public class DefaultHandler extends AbstractLogHandler {
+public class DefaultHandler extends AbstractHandler {
 	private long _requests = 0;
 	private long _totalLength = 0;
 	private long _noLength = 0;
-	private final HashMap<Integer, DefaultHandler.PerStatusInfo> _statusCounts = new HashMap<Integer, DefaultHandler.PerStatusInfo>();
+	private final TreeMap<Integer, DefaultHandler.PerStatusInfo> _statusCounts = new TreeMap<Integer, DefaultHandler.PerStatusInfo>();
 
-	private final List<AbstractFilter> _filters = new ArrayList<AbstractFilter>();
-	private final List<AbstractCollector> _collectors = new ArrayList<AbstractCollector>();
+	private final List<Filter> _filters = new ArrayList<Filter>();
+	private final List<Collector> _collectors = new ArrayList<Collector>();
 
 	public DefaultHandler(String name) {
 		super(name);
 	}
 
-	public DefaultHandler addFilter(AbstractFilter filter) {
+	public DefaultHandler addFilter(Filter filter) {
 		_filters.add(filter);
 		return this;
 	}
 
-	public DefaultHandler addCollector(AbstractCollector collector) {
+	public DefaultHandler addCollector(Collector collector) {
 		_collectors.add(collector);
 		return this;
 	}
 
 	@Override
 	public void handle(Request request) {
-		for (AbstractFilter f : _filters) {
+		for (Filter f : _filters) {
 			if (f.filter(request)) {
 				return;
 			}
@@ -72,7 +72,7 @@ public class DefaultHandler extends AbstractLogHandler {
 		}
 		info.increment(length);
 
-		for (AbstractCollector collector : _collectors) {
+		for (Collector collector : _collectors) {
 			collector.collect(request);
 		}
 	}
@@ -80,7 +80,7 @@ public class DefaultHandler extends AbstractLogHandler {
 	@Override
 	public void report() {
 		if (_filters.size() > 0) {
-			for (AbstractFilter f : _filters) {
+			for (Filter f : _filters) {
 				System.out.println();
 				System.out.println("Filter: " + f.getName());
 			}
@@ -95,7 +95,7 @@ public class DefaultHandler extends AbstractLogHandler {
 		}
 
 		if (_collectors.size() > 0) {
-			for (AbstractCollector c : _collectors) {
+			for (Collector c : _collectors) {
 				System.out.println();
 				System.out.println("Collector: " + c.getName());
 				c.report();

@@ -15,17 +15,14 @@
  */
 package at.molindo.webtools.loganalyzer.collector;
 
-public abstract class AbstractCollector implements Collector {
+import at.molindo.webtools.loganalyzer.Request;
 
-	private final String _name;
+public interface Collector {
 
-	public AbstractCollector(String name) {
-		_name = name;
-	}
+	String getName();
 
-	@Override
-	public String getName() {
-		return _name;
-	}
+	void collect(Request request);
+
+	void report();
 
 }

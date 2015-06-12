@@ -15,38 +15,17 @@
  */
 package at.molindo.webtools.loganalyzer.collector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-
 import at.molindo.webtools.loganalyzer.Request;
 
-public class AgentCollector extends AbstractCollector {
-	private static final int MAX_REPORTED = 64;
+public class AgentCollector extends KeyCountCollector<String> {
 
 	public AgentCollector() {
 		super("Agents");
 	}
 
-	private final HashSet<String> _agents = new HashSet<String>();
-
 	@Override
-	public void report() {
-		Collection<String> agents;
-		if (_agents.size() > MAX_REPORTED) {
-			agents = new ArrayList<String>(_agents).subList(0, MAX_REPORTED);
-		} else {
-			agents = _agents;
-		}
-
-		System.out.println("agents count:    " + _agents.size());
-		if (agents.size() > 0) {
-			System.out.println("agents:          " + agents + (_agents.size() > MAX_REPORTED ? " ..." : ""));
-		}
+	protected String getKey(Request request) {
+		return request.getAgent();
 	}
 
-	@Override
-	public void collect(Request request) {
-		_agents.add(request.getAgent());
-	}
 }
