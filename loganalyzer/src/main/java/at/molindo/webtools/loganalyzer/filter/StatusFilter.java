@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer.filter;
 
 import java.util.Arrays;
@@ -26,7 +22,7 @@ import at.molindo.webtools.loganalyzer.Request;
 
 public class StatusFilter extends AbstractFilter {
 
-	private HashSet<Integer> _statuses = new HashSet<Integer>();
+	private final HashSet<Integer> _statuses = new HashSet<Integer>();
 
 	public StatusFilter(int... statuses) {
 		super("Requests with statuses: " + Arrays.asList(statuses));

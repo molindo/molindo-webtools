@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>at.molindo</groupId>
 		<artifactId>molindo-oss-pom</artifactId>
-		<version>4-SNAPSHOT</version>
+		<version>4</version>
 	</parent>
 
 	<artifactId>molindo-webtools</artifactId>
@@ -38,6 +38,30 @@
 		<module>loganalyzer</module>
 		<module>logreplay</module>
 	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+		
+			<!-- modules -->
+			<dependency>
+				<groupId>at.molindo</groupId>
+				<artifactId>molindo-crawler</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.molindo</groupId>
+				<artifactId>molindo-loganalyzer</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>at.molindo</groupId>
+				<artifactId>molindo-logreplay</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		
+		
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -49,6 +73,12 @@
 			<groupId>jtidy</groupId>
 			<artifactId>jtidy</artifactId>
 			<version>4aug2000r7-dev</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>at.molindo</groupId>
+			<artifactId>molindo-utils</artifactId>
+			<version>${molindo-utils.version}</version>
 		</dependency>
 		
 		<!-- upgrade from test scope only -->
@@ -103,5 +133,9 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<properties>
+		<molindo-utils.version>1.1.4</molindo-utils.version>
+	</properties>
 
 </project>

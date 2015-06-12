@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer.handler;
 
 import java.util.ArrayList;
@@ -32,10 +28,10 @@ public class DefaultHandler extends AbstractLogHandler {
 	private long _requests = 0;
 	private long _totalLength = 0;
 	private long _noLength = 0;
-	private HashMap<Integer, DefaultHandler.PerStatusInfo> _statusCounts = new HashMap<Integer, DefaultHandler.PerStatusInfo>();
+	private final HashMap<Integer, DefaultHandler.PerStatusInfo> _statusCounts = new HashMap<Integer, DefaultHandler.PerStatusInfo>();
 
-	private List<AbstractFilter> _filters = new ArrayList<AbstractFilter>();
-	private List<AbstractCollector> _collectors = new ArrayList<AbstractCollector>();
+	private final List<AbstractFilter> _filters = new ArrayList<AbstractFilter>();
+	private final List<AbstractCollector> _collectors = new ArrayList<AbstractCollector>();
 
 	public DefaultHandler(String name) {
 		super(name);
@@ -92,8 +88,8 @@ public class DefaultHandler extends AbstractLogHandler {
 		}
 
 		System.out.println("requests:        " + _requests);
-		System.out.println("no length:       " + _noLength + " (" + (100f / _requests * _noLength) + "%)");
-		System.out.println("total length:    " + (_totalLength / (1024 * 1024)) + " MB");
+		System.out.println("no length:       " + _noLength + " (" + 100f / _requests * _noLength + "%)");
+		System.out.println("total length:    " + _totalLength / (1024 * 1024) + " MB");
 		for (Map.Entry<Integer, DefaultHandler.PerStatusInfo> e : _statusCounts.entrySet()) {
 			System.out.println(e.getKey() + ":             " + e.getValue());
 		}
