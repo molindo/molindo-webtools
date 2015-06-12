@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package at.molindo.webtools.loganalyzer;
 
 import java.io.BufferedReader;
@@ -202,7 +201,7 @@ public class LogAnalyzer {
 	}
 
 	public static LogAnalyzer file(final File file, final Compression compression) throws FileNotFoundException,
-			IOException {
+	IOException {
 		if (file == null) {
 			throw new NullPointerException("file");
 		}
@@ -292,12 +291,12 @@ public class LogAnalyzer {
 		a.addHandler(new DefaultHandler("Agents")
 		// .addFilter(new AgentFilter("Googlebot", false))
 		// .addFilter(new StatusFilter(302))
-				.addCollector(new AgentCollector())
+		.addCollector(new AgentCollector())
 		// .addCollector(new RefererCollector())
 		// .addCollector(new RequestCollector())
 		// .addFilter(new RequestPrefixFilter("/img", "/script", "/css"))
 		// .addFilter(new RequestPrefixFilter("widgets/setlist-image"))
-		);
+				);
 
 		// a.addHandler(new DefaultHandler("all"));
 		// a.addHandler(new DefaultHandler("resources").addFilter(new

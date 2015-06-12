@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package at.molindo.webtools.crawler;
 
 import java.util.List;
@@ -44,6 +43,8 @@ public class Crawler extends Observable {
 
 	private ThreadPoolExecutor _executor;
 	final String _host;
+	private final String _username;
+	private final String _password;
 	private int _max;
 	private ICrawlerHistory _history;
 	private String _start;
@@ -56,9 +57,16 @@ public class Crawler extends Observable {
 	private final List<ICrawlerFilter> _filters = new CopyOnWriteArrayList<ICrawlerFilter>();
 
 	public Crawler(final String host, final String start, final int threads, final int max, final boolean tidy) {
+		this(host, null, null, start, threads, max, tidy);
+	}
+
+	public Crawler(final String host, final String username, final String password, final String start,
+			final int threads, final int max, final boolean tidy) {
 		_host = host.endsWith("/") ? host : host + "/";
 		_start = start.startsWith(_host) ? start : _host + (start.startsWith("/") ? start.substring(1) : start);
 		_tidy = tidy;
+		_username = username;
+		_password = password;
 
 		final XMLParserConfiguration config = new XIncludeAwareParserConfiguration();
 		config.setProperty("http://apache.org/xml/properties/internal/grammar-pool", new XMLGrammarPoolImpl());
@@ -69,12 +77,12 @@ public class Crawler extends Observable {
 		_executor = new ThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, newBlockingQueue(),
 				new ThreadFactory() {
 
-					@Override
-					public Thread newThread(final Runnable r) {
-						return new CrawlerThread(Crawler.this, r);
-					}
+			@Override
+			public Thread newThread(final Runnable r) {
+				return new CrawlerThread(Crawler.this, r);
+			}
 
-				});
+		});
 		_executor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
 
 			@Override
@@ -205,5 +213,13 @@ public class Crawler extends Observable {
 
 		s.addObserver(new PrintObserver(true));
 		s.addObserver(new ExitObserver());
+	}
+
+	public String getUsername() {
+		return _username;
+	}
+
+	public String getPassword() {
+		return _password;
 	}
 }

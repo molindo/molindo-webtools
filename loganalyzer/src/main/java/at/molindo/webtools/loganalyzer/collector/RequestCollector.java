@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer.collector;
 
 import java.util.ArrayList;
@@ -28,7 +24,7 @@ import at.molindo.webtools.loganalyzer.Request;
 public class RequestCollector extends AbstractCollector {
 	private static final int MAX_REPORTED = 64;
 
-	private HashSet<String> _requests = new HashSet<String>();
+	private final HashSet<String> _requests = new HashSet<String>();
 
 	public RequestCollector() {
 		super("Requests");

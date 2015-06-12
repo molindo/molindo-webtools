@@ -41,6 +41,8 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+			<!-- modules -->
 			<dependency>
 				<groupId>at.molindo</groupId>
 				<artifactId>molindo-webtools-crawler</artifactId>
@@ -61,11 +63,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>at.molindo</groupId>
-			<artifactId>molindo-utils</artifactId>
-			<version>2.0.4</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.0.1</version>
@@ -74,6 +71,12 @@
 			<groupId>jtidy</groupId>
 			<artifactId>jtidy</artifactId>
 			<version>4aug2000r7-dev</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>at.molindo</groupId>
+			<artifactId>molindo-utils</artifactId>
+			<version>${molindo-utils.version}</version>
 		</dependency>
 		
 		<!-- upgrade from test scope only -->
@@ -128,5 +131,9 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<properties>
+		<molindo-utils.version>2.0.4</molindo-utils.version>
+	</properties>
 
 </project>
