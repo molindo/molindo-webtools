@@ -9,8 +9,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>at.molindo.webtools</groupId>
-	<artifactId>molindo-logreplay</artifactId>
+	<artifactId>molindo-webtools-logreplay</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Molindo Web Tools LogReplay</name>
@@ -20,14 +19,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>at.molindo.webtools</groupId>
-			<artifactId>molindo-crawler</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>at.molindo</groupId>
+			<artifactId>molindo-webtools-crawler</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>at.molindo.webtools</groupId>
-			<artifactId>molindo-loganalyzer</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>at.molindo</groupId>
+			<artifactId>molindo-webtools-loganalyzer</artifactId>
 		</dependency>
 	</dependencies>
 </project>
