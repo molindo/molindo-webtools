@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package at.molindo.webtools.loganalyzer.collector;
 
-/**
- * 
- */
-package at.molindo.webtools.loganalyzer.filter;
+import at.molindo.webtools.loganalyzer.Request;
 
-public abstract class AbstractFilter implements Filter {
-	private final String _name;
+public class FileCollector extends KeyCountCollector<String> {
 
-	public AbstractFilter(String name) {
-		_name = name;
+	public FileCollector() {
+		super("File");
 	}
 
 	@Override
-	public String getName() {
-		return _name;
+	protected String getKey(Request request) {
+		return request.getPathFile();
 	}
 
 }

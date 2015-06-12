@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package at.molindo.webtools.loganalyzer.collector;
 
-/**
- * 
- */
-package at.molindo.webtools.loganalyzer.filter;
+import static org.junit.Assert.assertEquals;
 
-public abstract class AbstractFilter implements Filter {
-	private final String _name;
+import org.junit.Test;
 
-	public AbstractFilter(String name) {
-		_name = name;
+public class KeyCountCollectorTest {
+
+	@Test
+	public void format() {
+		assertEquals("foo: 1 (33.3333%)", KeyCountCollector.format("foo", 1, 3));
 	}
-
-	@Override
-	public String getName() {
-		return _name;
-	}
-
 }

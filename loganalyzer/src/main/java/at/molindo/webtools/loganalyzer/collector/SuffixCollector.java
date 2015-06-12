@@ -13,43 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
-package at.molindo.webtools.loganalyzer.handler;
+package at.molindo.webtools.loganalyzer.collector;
 
 import at.molindo.webtools.loganalyzer.Request;
 
-public abstract class AbstractLogHandler {
-	private String _name;
+public class SuffixCollector extends KeyCountCollector<String> {
 
-	public AbstractLogHandler(String name) {
-		setName(name);
+	public SuffixCollector() {
+		super("Suffix");
 	}
 
-	public abstract void report();
-
-	public abstract void handle(Request request);
-
-	public String getName() {
-		return _name;
-	}
-
-	public AbstractLogHandler setName(String name) {
-		_name = name;
-		return this;
-	}
-
-	public void onAfterFile() {
-	}
-
-	public void onBeforeFile() {
-	}
-
-	public void onAfterAnalyze() {
-	}
-
-	public void onBeforeAnalyze() {
+	@Override
+	protected String getKey(Request request) {
+		return request.getPathSuffix();
 	}
 }

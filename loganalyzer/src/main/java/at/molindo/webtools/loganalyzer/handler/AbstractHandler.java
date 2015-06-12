@@ -17,12 +17,12 @@
 /**
  * 
  */
-package at.molindo.webtools.loganalyzer.filter;
+package at.molindo.webtools.loganalyzer.handler;
 
-public abstract class AbstractFilter implements Filter {
+public abstract class AbstractHandler implements Handler {
 	private final String _name;
 
-	public AbstractFilter(String name) {
+	public AbstractHandler(String name) {
 		_name = name;
 	}
 
@@ -31,4 +31,19 @@ public abstract class AbstractFilter implements Filter {
 		return _name;
 	}
 
+	@Override
+	public void onAfterFile() {
+	}
+
+	@Override
+	public void onBeforeFile() {
+	}
+
+	@Override
+	public void onAfterAnalyze() {
+	}
+
+	@Override
+	public void onBeforeAnalyze() {
+	}
 }

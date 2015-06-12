@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * 
- */
 package at.molindo.webtools.loganalyzer.filter;
 
-public abstract class AbstractFilter implements Filter {
-	private final String _name;
+import at.molindo.webtools.loganalyzer.Request;
 
-	public AbstractFilter(String name) {
-		_name = name;
-	}
+public interface Filter {
 
-	@Override
-	public String getName() {
-		return _name;
-	}
+	String getName();
+
+	/**
+	 * @return true if request should be skipped
+	 */
+	boolean filter(Request request);
 
 }

@@ -19,24 +19,17 @@
  */
 package at.molindo.webtools.loganalyzer.collector;
 
-import at.molindo.webtools.loganalyzer.Request;
+public abstract class AbstractCollector implements Collector {
 
-public abstract class AbstractCollector {
-	private String _name;
+	private final String _name;
 
+	public AbstractCollector(String name) {
+		_name = name;
+	}
+
+	@Override
 	public String getName() {
 		return _name;
 	}
 
-	public void setName(String name) {
-		_name = name;
-	}
-
-	public AbstractCollector(String name) {
-		setName(name);
-	}
-
-	public abstract void collect(Request request);
-
-	public abstract void report();
 }
