@@ -198,6 +198,22 @@ public class Crawler extends Observable {
 		return _dtdMemoryCache;
 	}
 
+	public String getUsername() {
+		return _username;
+	}
+
+	public String getPassword() {
+		return _password;
+	}
+
+	public void shutdown() {
+		_executor.shutdown();
+	}
+
+	public void awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+		_executor.awaitTermination(timeout, unit);
+	}
+
 	public static void main(final String[] args) throws InterruptedException {
 		System.out.println("starting crawler");
 
@@ -215,11 +231,4 @@ public class Crawler extends Observable {
 		s.addObserver(new ExitObserver());
 	}
 
-	public String getUsername() {
-		return _username;
-	}
-
-	public String getPassword() {
-		return _password;
-	}
 }

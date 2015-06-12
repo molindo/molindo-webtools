@@ -55,8 +55,6 @@ public final class SlowRequestObserver implements Observer {
 			} else {
 				System.err.println(buf.toString());
 			}
-		} else if (arg == Crawler.FINISH) {
-			System.out.println("finish");
 		}
 	}
 }

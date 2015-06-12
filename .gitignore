@@ -5,3 +5,4 @@
 ./loganalyzer/target
 ./logreplay/target
 
+dependency-reduced-pom.xml

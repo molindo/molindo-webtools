@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -160,7 +161,7 @@ public class LogReplay {
 					return;
 				}
 
-				String r = extractRequest(unquote(request.getRequestUri()));
+				String r = extractRequest(unquote(request.getRequestLine()));
 				if (r == null) {
 					return;
 				}
@@ -196,6 +197,15 @@ public class LogReplay {
 						str.length() - 1) : str;
 			}
 		});
-		a.analyze();
+
+		try {
+			a.analyze();
+			crawler.shutdown();
+			crawler.awaitTermination(1, TimeUnit.HOURS);
+		} catch (InterruptedException e) {
+			System.err.println("waiting for completion interrupted");
+		} finally {
+			System.exit(0);
+		}
 	}
 }
