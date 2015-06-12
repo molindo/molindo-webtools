@@ -1,8 +1,8 @@
 .classpath
 .project
-
-./crawler/target
-./loganalyzer/target
-./logreplay/target
+target/
 
 dependency-reduced-pom.xml
+pom.xml.releaseBackup
+release.properties
+
